@@ -1,0 +1,33 @@
+{
+  "name": "chatty-backend",
+  "version": "1.0.0",
+  "description": "Backend for Chatty app, a realtime chat app",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tejasautkar/chatty.git"
+  },
+  "keywords": [
+    "chat-app"
+  ],
+  "author": "Tejas Autkar",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/tejasautkar/chatty/issues"
+  },
+  "homepage": "https://github.com/tejasautkar/chatty#readme",
+  "devDependencies": {
+    "@types/cors": "^2.8.12",
+    "@types/express": "^4.17.13",
+    "@types/node": "^17.0.18"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.0",
+    "express": "^4.17.2",
+    "socket.io": "^4.4.1"
+  }
+}
