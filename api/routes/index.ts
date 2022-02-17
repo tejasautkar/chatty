@@ -1,5 +1,5 @@
 import { Router } from "express"
-import { onLogin, onLogout } from "../controllers/user";
+import { onLogin, onLogout } from "../controllers/UserController";
 import { authorize } from "../middleware/jwt";
 
 const router = Router();

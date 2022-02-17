@@ -1,14 +1,14 @@
 import { Router } from 'express';
-import { onGetAllUsers, onCreateUser, onGetUserById, onDeleteUserById } from '../controllers/user';
+import { onGetAllUsers, onCreateUser, onGetUserById, onDeleteUserById } from '../controllers/UserController';
 import { authorize } from '../middleware/jwt';
 
 
 const router = Router();
 
 router
-  .get('/', authorize, onGetAllUsers)
-  .post('/',authorize, onCreateUser)
-  .get('/:id',authorize, onGetUserById)
+  .get('/', onGetAllUsers)
+  .post('/', onCreateUser)
+  .get('/:id', onGetUserById)
   .delete('/:id',authorize, onDeleteUserById)
 
 export default router;
