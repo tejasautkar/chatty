@@ -13,6 +13,8 @@ const userSchema = new Schema<IUser>(
     firstName: String,
     lastName: String,
     type: String,
+    email: String,
+    password: String,
   },
   {
     timestamps: true,
@@ -22,8 +24,10 @@ const userSchema = new Schema<IUser>(
 
 export const validateUser = (userObj: IUser )=> {
   let schema: Joi.ObjectSchema<IUser> = Joi.object({
+    email: Joi.string().email().required(),
     firstName: Joi.string().required(),
     lastName: Joi.string().required(),
+    password: Joi.string().required(),
     type: Joi.string().required().valid(...Object.values(USER_TYPES)),
   });
   return schema.validate(userObj);

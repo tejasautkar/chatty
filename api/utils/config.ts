@@ -6,5 +6,10 @@ export const config = {
     db: {
         url: process.env.NODE_ENV === 'production' ? process.env.MONGODB_STRING : `mongodb://${process.env.MONGODB_HOST}:${process.env.MONGODB_PORT}/${process.env.DB_NAME}`,
         name: process.env.DB_NAME
-    }
+    },
+    passwordSalt: process.env.PASSWORDSALT!,
+    jwtSalt: process.env.JWTSALT!,
+    jwtExpire: 30 * 60 * 1000
+
+
 }

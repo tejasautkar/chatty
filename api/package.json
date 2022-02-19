@@ -22,18 +22,22 @@
   },
   "homepage": "https://github.com/tejasautkar/chatty#readme",
   "devDependencies": {
+    "@types/bcrypt": "^5.0.0",
     "@types/cors": "^2.8.12",
     "@types/express": "^4.17.13",
     "@types/jsonwebtoken": "^8.5.8",
+    "@types/lodash": "^4.14.178",
     "@types/morgan": "^1.9.3",
     "@types/node": "^17.0.18",
     "@types/uuid": "^8.3.4"
   },
   "dependencies": {
+    "bcrypt": "^5.0.1",
     "cors": "^2.8.5",
     "dotenv": "^16.0.0",
     "express": "^4.17.2",
     "joi": "^17.6.0",
+    "lodash": "^4.17.21",
     "socket.io": "^4.4.1",
     "winston": "^3.6.0"
   }
