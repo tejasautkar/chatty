@@ -6,8 +6,10 @@ import { logger } from "../utils/Logger";
 import { ISessionService } from "./interfaces/ISessionService";
 
 export class SessionService implements ISessionService {
-    private readonly sessionRepo: ISessionRepo = new SessionRepo();
-
+    private sessionRepo: ISessionRepo;
+    constructor() {
+        this.sessionRepo = new SessionRepo();
+    }
     async saveSession(sessionObj: ISessions): Promise<ISessions> {
         try {
             return await this.sessionRepo.saveSession(sessionObj);
@@ -18,7 +20,7 @@ export class SessionService implements ISessionService {
     }
     async destroySessionBySessionId(sessionId: string): Promise<ISessions> {
         try {
-            return await this.sessionRepo.updateSession({sessionId},{isLoggedIn: false});
+            return await this.sessionRepo.updateSession({ _id: sessionId }, { isLoggedIn: false });
         } catch (error) {
             logger.error(`Session Service [updateSession] - ${error}`);
             throw error;
@@ -26,7 +28,7 @@ export class SessionService implements ISessionService {
     }
     async findSessionsByuserId(userId: string): Promise<ISessions[]> {
         try {
-            return await this.sessionRepo.findSessions({userId});
+            return await this.sessionRepo.findSessions({ userId });
         } catch (error) {
             logger.error(`Session Service [findSessionsByuserId] - ${error}`);
             throw error;

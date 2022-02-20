@@ -1,80 +1,102 @@
 import { NextFunction, Response } from "express";
-import { IBaseRequest } from "../utils/utilTypes";
+import { httpStatusCode, IBaseRequest } from "../utils/utilTypes";
 import { validateUser } from '../models/User';
 import { logger } from "../utils/Logger";
 import { UserService } from "../services/UserService";
-import { IUserService } from "../services/interfaces/IUserService";
+import BaseController from "../utils/BaseContoller";
+import { ResponseMessage } from "../utils/ResponseMessage";
 
-export class UserController {
+export class UserController extends BaseController {
+    private readonly userService: UserService;
 
-    private readonly userService: IUserService = new UserService();
+    constructor() {
+        super();
+        this.userService = new UserService();
+    }
 
-    async onGetAllUsers(req: IBaseRequest, res: Response) {
+    async onGetAllUsers(req: IBaseRequest, res: Response, next: NextFunction) {
+        let obj = new ResponseMessage();
         try {
-
             const data = await this.userService.findAllUsersService();
-            res.status(200).json({ success: true, data }).send();
-
+            obj.data = data;
+            this.createResponse.successRes(res, obj);
         } catch (error) {
             logger.error(`UserController findAllUsers - ${error}`);
-            res.status(500).json({ success: false, error });
+            next(error);
         }
-    };
-    async onGetUserById(req: IBaseRequest, res: Response) {
+    }
+    async onGetUserById(req: IBaseRequest, res: Response, next: NextFunction) {
+        let obj = new ResponseMessage();
         try {
             const id: string | undefined = req?.params?.id;
             const data = await this.userService.findOneByIdService(id);
             if (!data) {
+                obj.httpStatusCode = httpStatusCode.NOT_FOUND;
                 throw new Error("User not found");
             }
-            res.status(200).json({ success: true, data }).send();
-
+            obj.data = data;
+            obj.httpStatusCode = httpStatusCode.OK;
+            this.createResponse.successRes(res, obj);
         } catch (error) {
             logger.error(`onCreateUser ${error}`);
-            res.status(500).json({ success: false, error }).send();
+            next(error);
         }
     }
-    async onCreateUser(req: IBaseRequest, res: Response) {
+
+    async onCreateUser(req: IBaseRequest, res: Response, next: NextFunction) {
+        let obj = new ResponseMessage();
         try {
             const { firstName, lastName, type, password, email } = req.body;
             const { error, value } = validateUser({ firstName, lastName, type, password, email });
             if (error) {
+                obj.httpStatusCode = httpStatusCode.BAD_REQUEST;
                 throw new Error("Bad Request");
             }
-            if (value) {
-                const data = await this.userService.saveUserService(value);
-                res.status(200).json({ success: true, data }).send();
-            }
-        } catch (error) {
+            const data = await this.userService.saveUserService(value);
+            obj.data = data;
+            obj.httpStatusCode = httpStatusCode.CREATED;
+            this.createResponse.successRes(res, obj);
+        } catch (error: any) {
             logger.error(`onCreateUser ${error}`);
-            res.status(500).json({ success: false, error }).send();
+            next(error);
         }
     }
 
-    async onDeleteUserById(req: IBaseRequest, res: Response) {
+    async onDeleteUserById(req: IBaseRequest, res: Response, next: NextFunction) {
+        let obj = new ResponseMessage();
         try {
             const id: string | undefined = req?.params?.id;
             const data = await this.userService.deleteUserById(id);
-            res.status(200).json({ success: true, data }).send();
-
+            obj.data = data;
+            obj.httpStatusCode = httpStatusCode.OK;
+            this.createResponse.successRes(res, obj);
         } catch (error) {
             logger.error(`onDeleteUserById ${error}`);
-            res.status(500).json({ success: false, error }).send();
+            next(error);
         }
     }
-    async onLogin(req: IBaseRequest, res: Response) {
+    async onLogin(req: IBaseRequest, res: Response, next: NextFunction) {
+        let obj = new ResponseMessage();
         try {
             const data = await this.userService.onLoginService(req, res);
-            if (!data) {
-                throw new Error("User not found");
-            }
-            res.status(200).json({ success: true, data }).send();
-
+            obj.data = data;
+            obj.httpStatusCode = httpStatusCode.CREATED;
+            this.createResponse.successRes(res, obj);
         } catch (error) {
             logger.error(`onCreateUser ${error}`);
-            res.status(500).json({ success: false, error }).send();
+            next(error);
         }
-    };
-    async onLogout(req: IBaseRequest, res: Response) { };
+    }
+
+    async onLogout(req: IBaseRequest, res: Response, next: NextFunction) {
+        let obj = new ResponseMessage();
+        try {
+            await this.userService.onLogoutService(req, res);
+            this.createResponse.successRes(res, obj);
+        } catch (error) {
+            logger.error(`onCreateUser ${error}`);
+            next(error);
+        }
+    }
 }
 

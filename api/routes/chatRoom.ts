@@ -4,10 +4,10 @@ import { getConversationByRoomId, getRecentConversation, initiate, markConversat
 const router = Router();
 
 router
-  .get('/', getRecentConversation)
-  .get('/:roomId', getConversationByRoomId)
-  .post('/initiate', initiate)
-  .post('/:roomId/message', postMessage)
-  .put('/:roomId/mark-read', markConversationReadByRoomId)
+  .get('/',() => getRecentConversation)
+  .get('/:roomId',() =>  getConversationByRoomId)
+  .post('/initiate',() =>  initiate)
+  .post('/:roomId/message',() =>  postMessage)
+  .put('/:roomId/mark-read',() =>  markConversationReadByRoomId)
 
 export default router;
